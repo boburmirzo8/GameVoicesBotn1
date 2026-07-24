@@ -1,0 +1,48 @@
+# Render Blueprint for GameVoicesBot
+# https://render.com/docs/blueprint-spec
+#
+# GameVoicesBot uses long polling (not webhooks), so it is deployed as a
+# Render "worker" service, i.e. a background process with no public HTTP
+# endpoint. Push this repo to GitHub/GitLab, then in Render choose
+# "New +" -> "Blueprint" and point it at this repository.
+
+services:
+  - type: worker
+    name: gamevoicesbot
+    env: python
+    plan: starter
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    autoDeploy: true
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: RAWG_API_KEY
+        sync: false
+      - key: TRANSLATE_ENABLED
+        value: "true"
+      - key: LIBRETRANSLATE_URL
+        value: "https://libretranslate.com/translate"
+      - key: LIBRETRANSLATE_API_KEY
+        sync: false
+      - key: POST_INTERVAL_HOURS
+        value: "6"
+      - key: GAMES_LOOKBACK_DAYS
+        value: "3"
+      - key: GAMES_PER_RUN
+        value: "4"
+      - key: TIMEZONE
+        value: "Asia/Tashkent"
+      - key: LOG_LEVEL
+        value: "INFO"
+      - key: PYTHON_VERSION
+        value: "3.13.0"
+    disk:
+      name: gamevoices-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
