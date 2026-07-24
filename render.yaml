@@ -41,7 +41,7 @@ services:
       - key: LOG_LEVEL
         value: "INFO"
       - key: PYTHON_VERSION
-        value: "3.13.0"
+        value: "3.12.10"
     disk:
       name: gamevoices-data
       mountPath: /opt/render/project/src/data
